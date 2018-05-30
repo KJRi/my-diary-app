@@ -1,0 +1,15 @@
+.containel{
+  padding: 10px;
+  :global .ant-form-item{
+    margin: 8px 0;
+  }
+  :global .ant-cascader-picker{
+    max-width: 350px;
+  }
+}
+.loginButton{
+  float: right;
+}
+:global .BraftEditor-container{
+  background-color: #FFF;
+}
