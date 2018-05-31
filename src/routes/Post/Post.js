@@ -17,6 +17,7 @@ type State = {
   visible: Boolean,
   confirmLoading: Boolean,
   userinfo: Object,
+  headerImg: String,
   likeState: Boolean,
   fileList: Array<Object>
 }
@@ -30,7 +31,8 @@ class Post extends React.PureComponent<Props, State> {
       confirmLoading: false,
       userinfo: {},
       likeState: false,
-      fileList: []
+      fileList: [],
+      headerImg: ''
     }
   }
   componentWillMount () {
@@ -41,9 +43,12 @@ class Post extends React.PureComponent<Props, State> {
     })
     .then(res => res.json())
     .then(res => {
-      this.setState({
-        userinfo: res
-      })
+      if (res !== null) {
+        this.setState({
+          userinfo: res,
+          headerImg: res.headerImg
+        })
+      }
     })
     fetch(`/diary/get?id=${id}`, {
       method: 'GET'
@@ -215,7 +220,7 @@ class Post extends React.PureComponent<Props, State> {
     })
   }
   render () {
-    const { postlist, fileList, visible, confirmLoading, likeState, commentList, userinfo } = this.state
+    const { postlist, fileList, headerImg, visible, confirmLoading, likeState, commentList, userinfo } = this.state
     return (
       <div>
         <Card
@@ -237,11 +242,7 @@ class Post extends React.PureComponent<Props, State> {
           <Meta
             avatar={
               <div style={{ textAlign: 'center' }}>
-                {
-                  userinfo.headerImg
-                  ? <Avatar src={userinfo.headerImg} />
-                  : <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                }
+                <Avatar src={headerImg} />
                 <h5 style={{ color: '#999' }}>{postlist.author}</h5>
               </div>
           }
