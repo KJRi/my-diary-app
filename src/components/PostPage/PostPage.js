@@ -2,6 +2,7 @@
 import React from 'react'
 import styles from './PostPage.css'
 import { List, Avatar, Icon } from 'antd'
+import moment from 'moment'
 
 type Props = {
   postlist: Array<Object>,
@@ -24,7 +25,7 @@ class PostPage extends React.PureComponent<Props, State> {
 )
     const postlist = this.props.postlist
     postlist && postlist.map(item => {
-      item.href = `http://localhost:3000/id/${item._id}`
+      item.href = `/id/${item._id}`
     })
     console.log(postlist)
     return (
@@ -36,7 +37,7 @@ class PostPage extends React.PureComponent<Props, State> {
           <List.Item
             key={item.title}
             actions={[
-              <IconText type='tag-o' text={item.tag} />]}
+              <IconText type='tag-o' text={moment(item.postTime).calendar()} />]}
       >
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}

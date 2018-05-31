@@ -25,17 +25,8 @@ class MyLike extends React.PureComponent<Props, State> {
     })
     .then(res => res.json())
     .then(res => {
-      res && res.map(res => {
-        fetch(`/post/get?postId=${res.post}`, {
-          method: 'GET'
-        })
-        .then(res => res.json())
-        .then(res => {
-          let arr = [res]
-          this.setState((prevState, props) => ({
-            postlist: prevState.postlist.concat(arr)
-          }))
-        })
+      this.setState({
+        postlist: res
       })
     })
   }

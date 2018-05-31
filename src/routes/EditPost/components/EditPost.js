@@ -70,7 +70,7 @@ class EditPost extends React.PureComponent<Props, State> {
             weather: values.weather.label,
             content: values.content,
             location: values.location,
-            photo: values.fileList
+            photo: fileList
           })
         }).then(res => res.json())
           .then(res => {
@@ -89,12 +89,14 @@ class EditPost extends React.PureComponent<Props, State> {
     })
   }
   getImage = (fileList: Array<Object>) => {
+    console.log(fileList)
     this.setState({
       fileList
     })
   }
   render () {
     const { getFieldDecorator } = this.props.form
+    const { fileList } = this.state
     const editorProps = {
       height: 500,
       contentFormat: 'html',
@@ -110,7 +112,7 @@ class EditPost extends React.PureComponent<Props, State> {
     )
     return (
       <div className={styles['containel']}>
-        <ImageWallUpload getImage={this.getImage} />
+        <ImageWallUpload getImage={this.getImage} {...{ fileList }} />
         <Form onSubmit={this.handleSubmit} className={styles.formStyle}>
           <FormItem>
             {getFieldDecorator('weather', {

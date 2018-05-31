@@ -10,19 +10,19 @@ function getBase64 (img, callback) {
 }
 
 type Props = {
-  getImage: Function
+  getImage: Function,
+  fileList: Array<Object>
 }
 type State = {
   previewVisible: Boolean,
   previewImage: '',
-  fileList: Array<Object>
 }
 
 class ImageWallUpload extends React.PureComponent<Props, State> {
   state = {
     previewVisible: false,
     previewImage: '',
-    fileList: []
+    fileList: this.props.fileList
   }
   handleCancel = () => this.setState({ previewVisible: false })
 
@@ -38,7 +38,7 @@ class ImageWallUpload extends React.PureComponent<Props, State> {
     }, this.props.getImage(fileList))
   }
   render () {
-    const { previewVisible, previewImage, fileList } = this.state
+    const { previewVisible, previewImage } = this.state
     const uploadButton = (
       <div>
         <Icon type='plus' />
@@ -49,11 +49,11 @@ class ImageWallUpload extends React.PureComponent<Props, State> {
       <div className='clearfix'>
         <Upload
           listType='picture-card'
-          fileList={fileList}
+          fileList={this.props.fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
         >
-          {fileList.length >= 3 ? null : uploadButton}
+          {uploadButton}
         </Upload>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt='example' style={{ width: '100%' }} src={previewImage} />

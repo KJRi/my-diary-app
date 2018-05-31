@@ -31,49 +31,50 @@ router.get('/get', (req, res) => {
     Diary.findById(req.query.id).exec().then((posts) => {
       return res.json(posts)
     })
-  } else if (req.query.author) {
-    Diary.find({ 'author': req.query.author }).sort({ _id: -1 }).exec().then((posts) => {
-      return res.json(posts)
-    })
   } else if (req.query.title) {
     var reg = new RegExp(req.query.title)
-    Diary.find({ 'title': reg }).sort({ _id: -1 }).exec().then((posts) => {
+    Diary.find({ 'title': reg, 'author': req.query.author }).sort({ _id: -1 }).exec().then((posts) => {
       return res.json(posts)
     })
   } else if (req.query.timeOne && req.query.timeTwo) {
     Diary.find({ 'postTime':
     { '$gte': new Date(req.query.timeOne),
-      '$lt': new Date(req.query.timeTwo) } }).sort({ _id: -1 }).exec().then((posts) => {
+      '$lt': new Date(req.query.timeTwo) },
+      'author': req.query.author }).sort({ _id: -1 }).exec().then((posts) => {
         return res.json(posts)
       })
+  } else {
+    Diary.find({ 'author': req.query.author }).sort({ _id: -1 }).exec().then((posts) => {
+      return res.json(posts)
+    })
   }
 })
 
-// 添加照片
+// 添加删除照片
 router.post('/addPhoto', (req, res) => {
   if (!req.body.username) {
     res.json({ success: false, message: '未登录' })
   } else {
     Diary.update({ '_id': req.body.id },
-    { $push: { 'photo': req.body.imageUrl } }, { upsert: true }, (err) => {
+    { 'photo': req.body.imageUrl }, (err) => {
       if (err) {
-        return res.json({ success: false, message: '添加失败!' })
+        return res.json({ success: false, message: '修改失败!' })
       }
-      res.json({ success: true, message: '添加成功!' })
+      res.json({ success: true, message: '修改成功!' })
     })
   }
 })
-// 删除照片
-router.post('/deletePhoto', (req, res) => {
+// 删除日记
+router.post('/delete', (req, res) => {
   if (!req.body.username) {
     res.json({ success: false, message: '未登录' })
   } else {
-    Diary.update({ '_id': req.body.id },
-    { $pull: { 'photo': req.body.imageUrl } }, (err) => {
+    // 删除
+    Diary.remove({ '_id': req.body.id }, (err) => {
       if (err) {
-        return res.json({ success: false, message: '删除失败!' })
+        return res.json({ success: false, message: '删除日记失败!' })
       }
-      res.json({ success: true, message: '删除成功!' })
+      res.json({ success: true, message: '删除日记成功!' })
     })
   }
 })

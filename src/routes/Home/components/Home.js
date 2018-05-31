@@ -20,8 +20,9 @@ class Home extends React.PureComponent<Props, State> {
     this.searchPst = this.searchPst.bind(this)
   }
   searchPst (value) {
+    const username = localStorage.getItem('username')
     const evalue = value.trim()
-    fetch(`/post/get?title=${evalue}`, {
+    fetch(`/diary/get?title=${evalue}&&author=${username}`, {
       method: 'GET'
     })
     .then(res => res.json())
@@ -49,7 +50,7 @@ class Home extends React.PureComponent<Props, State> {
     return (
       <div>
         <Search
-          placeholder='请输入您想搜索的帖子'
+          placeholder='请输入您想搜索的日记'
           onSearch={this.searchPst}
           size='large'
         />
