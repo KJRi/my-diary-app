@@ -4,7 +4,6 @@ import styles from './EditPost.css'
 import { Input, Cascader, Form, Icon, Button, message, Select } from 'antd'
 import BraftEditor from 'braft-editor'
 import ImageWallUpload from 'components/ImageWallUpload'
-import data from 'data'
 import 'braft-editor/dist/braft.css'
 const FormItem = Form.Item
 const { Option } = Select
@@ -40,25 +39,46 @@ const options = [
 ]
 type Props = {}
 type State = {
-  fileList: Array<Object>
+  fileList: Array<Object>,
+  city: Object,
+  weather: String
 }
 
 class EditPost extends React.PureComponent<Props, State> {
   constructor (props) {
     super(props)
     this.state = {
-      fileList: []
+      city: {},
+      fileList: [],
+      weather: ''
     }
+  }
+  componentDidMount () {
+    fetch('http://restapi.amap.com/v3/ip?key=81f3fb6ad5112b377e554f14cc1b004d')
+    .then(res => res.json())
+    .then(res => {
+      const city = res.city
+      fetch(`https://free-api.heweather.com/s6/weather/now?location=${city}&key=b21c6e0491c04fd2a98f39779ad259d9`, {
+        method: 'GET'
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          weather: res.HeWeather6[0].now.cond_txt
+        })
+      })
+      this.setState({
+        city: res
+      })
+    })
   }
   handleCancel = () => this.setState({ previewVisible: false })
   // 发日记
   handleSubmit = (e) => {
     e.preventDefault()
-    const { fileList } = this.state
+    const { fileList, city, weather } = this.state
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(values)
-        console.log(fileList)
         fetch('diary/create', {
           method: 'POST',
           headers: {
@@ -67,9 +87,9 @@ class EditPost extends React.PureComponent<Props, State> {
           body: JSON.stringify({
             username: localStorage.getItem('username'),
             title: values.title,
-            weather: values.weather.label,
+            weather: weather,
             content: values.content,
-            location: values.location,
+            location: [city.province, city.city],
             photo: fileList
           })
         }).then(res => res.json())
@@ -114,25 +134,6 @@ class EditPost extends React.PureComponent<Props, State> {
       <div className={styles['containel']}>
         <ImageWallUpload getImage={this.getImage} {...{ fileList }} />
         <Form onSubmit={this.handleSubmit} className={styles.formStyle}>
-          <FormItem>
-            {getFieldDecorator('weather', {
-              rules: [{ required: true, message: '请选择天气!' }]
-            })(
-              <Select style={{ width: 200 }} labelInValue placeholder='选择天气' >
-                {
-                  options && options.map((list, index) => {
-                    return <Option value={list.value}>{list.label}</Option>
-                  })
-                }
-              </Select>
-                      )}
-          </FormItem>
-          <FormItem>
-            {getFieldDecorator('location')(
-              <Cascader
-                options={data} className={styles['type-item']} placeholder='请选择地点' />
-                )}
-          </FormItem>
           <FormItem>
             {getFieldDecorator('title', {
               rules: [{ required: true, message: '请输入标题!' },
