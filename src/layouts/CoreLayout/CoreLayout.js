@@ -15,9 +15,11 @@ export const CoreLayout = () => (
     <Header />
     <div className={styles['viewport']}>
       <Switch>
-        <Route path='/' component={routes.home} exact />
+        <Route path='/home' component={routes.home} exact />
+        <Route path='/' component={routes.allPeople} exact />
         <Route path='/myLike' component={routes.myLike} exact />
         <Route path='/id/:id' component={routes.post} exact />
+        <Route path='/otherId/:id' component={routes.otherPost} exact />
         <Route path='/editUserInfo' component={routes.editUserInfo} exact />
         <Route path='/personal' component={routes.personal} exact />
         <Route path='/detail' component={routes.detail} exact />

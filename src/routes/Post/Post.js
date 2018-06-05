@@ -55,7 +55,6 @@ class Post extends React.PureComponent<Props, State> {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res)
       this.setState({
         postlist: res,
         fileList: res.photo
@@ -66,7 +65,6 @@ class Post extends React.PureComponent<Props, State> {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res)
       if (res.length > 0) {
         this.setState({
           likeState: true

@@ -24,7 +24,19 @@ router.post('/create', (req, res) => {
     })
   }
 })
-
+// 获取所有日记
+router.get('/all', (req, res) => {
+  if (req.query.title) {
+    var reg = new RegExp(req.query.title)
+    Diary.find({ 'title': reg }).sort({ _id: -1 }).exec().then((posts) => {
+      return res.json(posts)
+    })
+  } else {
+    Diary.find().sort({ _id: -1 }).exec().then((posts) => {
+      return res.json(posts)
+    })
+  }
+})
 // 根据值获取日记
 router.get('/get', (req, res) => {
   if (req.query.id) {

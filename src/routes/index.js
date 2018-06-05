@@ -8,12 +8,16 @@ import Register from './Register'
 import EditPost from './EditPost'
 import EditUserInfo from './EditUserInfo'
 import Post from './Post'
+import OtherPost from './OtherPost'
 import MyLike from './MyLike'
+import AllPeople from './AllPeople'
 
 // Force import during development to enable Hot-Module Replacement
 // not need ?
 
 export default {
+  otherPost: OtherPost,
+  allPeople: AllPeople,
   myLike: MyLike,
   post: Post,
   editUserInfo: EditUserInfo,

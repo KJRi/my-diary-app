@@ -50,6 +50,9 @@ class Footer extends React.Component<Props, State> {
     let key
     switch (pathname) {
       case '/':
+        key = 'allPeople'
+        break
+      case '/home':
         key = 'home'
         break
       case '/detail':
@@ -78,7 +81,8 @@ class Footer extends React.Component<Props, State> {
           defaultSelectedKeys={['1']}
           className={styles['footer-menu']}
         >
-          <Menu.Item key='home'><Link to='/'><Icon type='home' />首页</Link></Menu.Item>
+          <Menu.Item key='allPeople'><Link to='/'><Icon type='home' />首页</Link></Menu.Item>
+          <Menu.Item key='home'><Link to='/home'><Icon type='book' />我的日记</Link></Menu.Item>
           <Menu.Item key='detail'><Link to='/detail'><Icon type='dashboard' />时间轴</Link></Menu.Item>
           <Menu.Item key='editPost'><Link to='/editPost'><Icon type='edit' />写日记</Link></Menu.Item>
           <Menu.Item key='personal'><Link to='/personal'><Icon type='user' />个人中心</Link></Menu.Item>
